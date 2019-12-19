@@ -37,9 +37,97 @@ In the cell below, import the dataset from this file and store it in a DataFrame
 
 ```python
 # Import the data
-salaries = None
+salaries = pd.read_csv('salaries_final.csv', index_col=0)
+salaries.head()
 
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Age</th>
+      <th>Education</th>
+      <th>Occupation</th>
+      <th>Relationship</th>
+      <th>Race</th>
+      <th>Sex</th>
+      <th>Target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>39</td>
+      <td>Bachelors</td>
+      <td>Adm-clerical</td>
+      <td>Not-in-family</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>50</td>
+      <td>Bachelors</td>
+      <td>Exec-managerial</td>
+      <td>Husband</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>38</td>
+      <td>HS-grad</td>
+      <td>Handlers-cleaners</td>
+      <td>Not-in-family</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>53</td>
+      <td>11th</td>
+      <td>Handlers-cleaners</td>
+      <td>Husband</td>
+      <td>Black</td>
+      <td>Male</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>28</td>
+      <td>Bachelors</td>
+      <td>Prof-specialty</td>
+      <td>Wife</td>
+      <td>Black</td>
+      <td>Female</td>
+      <td>&lt;=50K</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 In total, there are 6 predictors, and one outcome variable, the salary, `Target` - `<= 50k` and `>50k`.
 
@@ -64,17 +152,29 @@ Do this in the cell below.
 
 ```python
 # Split the outcome and predictor variables
-target = None
-
+target = salaries['Target']
+salaries = salaries.drop("Target", axis=1)
 ```
 
 In the cell below, examine the data type of each column:  
 
 
 ```python
-# Your code here
-
+salaries.info()
 ```
+
+    <class 'pandas.core.frame.DataFrame'>
+    Int64Index: 32561 entries, 0 to 32560
+    Data columns (total 6 columns):
+    Age             32561 non-null int64
+    Education       32561 non-null object
+    Occupation      32561 non-null object
+    Relationship    32561 non-null object
+    Race            32561 non-null object
+    Sex             32561 non-null object
+    dtypes: int64(1), object(5)
+    memory usage: 1.7+ MB
+    
 
 Great. `'Age'` is numeric, as it should be. Now we're ready to create some dummy columns and deal with our categorical variables.  
 
@@ -83,15 +183,188 @@ In the cell below, use Pandas to create dummy columns for each of categorical va
 
 ```python
 # Create dummy variables
-data = None
+data = pd.get_dummies(salaries,drop_first=True)
 data.head()
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Age</th>
+      <th>Education_11th</th>
+      <th>Education_12th</th>
+      <th>Education_1st-4th</th>
+      <th>Education_5th-6th</th>
+      <th>Education_7th-8th</th>
+      <th>Education_9th</th>
+      <th>Education_Assoc-acdm</th>
+      <th>Education_Assoc-voc</th>
+      <th>Education_Bachelors</th>
+      <th>...</th>
+      <th>Relationship_Not-in-family</th>
+      <th>Relationship_Other-relative</th>
+      <th>Relationship_Own-child</th>
+      <th>Relationship_Unmarried</th>
+      <th>Relationship_Wife</th>
+      <th>Race_Asian-Pac-Islander</th>
+      <th>Race_Black</th>
+      <th>Race_Other</th>
+      <th>Race_White</th>
+      <th>Sex_Male</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>39</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>50</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>38</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>53</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>28</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 40 columns</p>
+</div>
+
+
 
 Now, split `data` and `target` into 75/25 training and test sets. Set the `random_state` to 123.  
 
 
 ```python
-data_train, data_test, target_train, target_test = None
+data_train, data_test, target_train, target_test = train_test_split(data, target, 
+                                                                    test_size = 0.25, random_state=123)
 ```
 
 ## Build a "regular" tree as a baseline
@@ -105,9 +378,21 @@ In the cell below, instantiate and fit a decision tree classifier. Set the `crit
 
 ```python
 # Instantiate and fit a DecisionTreeClassifier
-tree_clf = None
-
+tree_clf = DecisionTreeClassifier(criterion='gini', max_depth= 5)
+tree_clf.fit(data_train, target_train)
 ```
+
+
+
+
+    DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=5,
+                           max_features=None, max_leaf_nodes=None,
+                           min_impurity_decrease=0.0, min_impurity_split=None,
+                           min_samples_leaf=1, min_samples_split=2,
+                           min_weight_fraction_leaf=0.0, presort=False,
+                           random_state=None, splitter='best')
+
+
 
 ### Feature importance
 
@@ -115,8 +400,22 @@ Let's quickly examine how important each feature ended up being in our decision 
 
 
 ```python
-# Feature importance
+tree_clf.feature_importances_
 ```
+
+
+
+
+    array([0.30446918, 0.        , 0.        , 0.        , 0.        ,
+           0.        , 0.        , 0.        , 0.        , 0.01174726,
+           0.00731382, 0.01770231, 0.01362388, 0.        , 0.        ,
+           0.        , 0.        , 0.        , 0.        , 0.10865096,
+           0.        , 0.        , 0.        , 0.01126856, 0.        ,
+           0.13019604, 0.        , 0.        , 0.        , 0.        ,
+           0.10188485, 0.        , 0.00056004, 0.        , 0.13774195,
+           0.00045497, 0.        , 0.        , 0.        , 0.15438617])
+
+
 
 That matrix isn't very helpful, but a visualization of the data it contains could be.  Run the cell below to plot a visualization of the feature importances for this model. 
 
@@ -133,6 +432,10 @@ def plot_feature_importances(model):
 plot_feature_importances(tree_clf)
 ```
 
+
+![png](index_files/index_22_0.png)
+
+
 ### Model performance
 
 Next, let's see how well our model performed on the test data. 
@@ -146,11 +449,25 @@ In the cell below:
 
 ```python
 # Test set predictions
-pred = None
+pred = tree_clf.predict(data_test)
 
 # Confusion matrix and classification report
-
+print(confusion_matrix(target_test,pred))
+print(classification_report(target_test,pred))
 ```
+
+    [[5825  340]
+     [1201  775]]
+                  precision    recall  f1-score   support
+    
+               0       0.83      0.94      0.88      6165
+               1       0.70      0.39      0.50      1976
+    
+        accuracy                           0.81      8141
+       macro avg       0.76      0.67      0.69      8141
+    weighted avg       0.80      0.81      0.79      8141
+    
+    
 
 Now, let's check the model's accuracy. Run the cell below to display the test set accuracy of the model. 
 
@@ -158,6 +475,9 @@ Now, let's check the model's accuracy. Run the cell below to display the test se
 ```python
 print("Testing Accuracy for Decision Tree Classifier: {:.4}%".format(accuracy_score(target_test, pred) * 100))
 ```
+
+    Testing Accuracy for Decision Tree Classifier: 81.07%
+    
 
 ## Bagged trees
 
@@ -168,7 +488,8 @@ Now, let's instantiate a [`BaggingClassifier`](http://scikit-learn.org/stable/mo
 
 ```python
 # Instantiate a BaggingClassifier
-bagged_tree = None
+bagged_tree =  BaggingClassifier(DecisionTreeClassifier(criterion='gini', max_depth=5), 
+                                 n_estimators=20)
 ```
 
 Great! Now, fit it to our training data. 
@@ -176,8 +497,35 @@ Great! Now, fit it to our training data.
 
 ```python
 # Fit to the training data
-
+bagged_tree.fit(data_train,target_train)
 ```
+
+    C:\Users\FlatIron_User\.conda\envs\learn-env\lib\site-packages\sklearn\ensemble\bagging.py:623: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+      y = column_or_1d(y, warn=True)
+    
+
+
+
+
+    BaggingClassifier(base_estimator=DecisionTreeClassifier(class_weight=None,
+                                                            criterion='gini',
+                                                            max_depth=5,
+                                                            max_features=None,
+                                                            max_leaf_nodes=None,
+                                                            min_impurity_decrease=0.0,
+                                                            min_impurity_split=None,
+                                                            min_samples_leaf=1,
+                                                            min_samples_split=2,
+                                                            min_weight_fraction_leaf=0.0,
+                                                            presort=False,
+                                                            random_state=None,
+                                                            splitter='best'),
+                      bootstrap=True, bootstrap_features=False, max_features=1.0,
+                      max_samples=1.0, n_estimators=20, n_jobs=None,
+                      oob_score=False, random_state=None, verbose=0,
+                      warm_start=False)
+
+
 
 Checking the accuracy of a model is such a common task that all (supervised learning) models have a `.score()` method that wraps the `accuracy_score()` helper function we've been using. All we have to do is pass it a dataset and the corresponding labels and it will return the accuracy score for those data/labels.  
 
@@ -186,16 +534,31 @@ Let's use it to get the training accuracy of our model. In the cell below, call 
 
 ```python
 # Training accuracy score
-
+bagged_tree.score(data_train,target_train)
 ```
+
+
+
+
+    0.8171171171171171
+
+
 
 Now, let's check the accuracy score that really matters -- our testing accuracy.  This time, pass in our testing data and labels to see how the model did.  
 
 
 ```python
 # Test accuracy score
+bagged_tree.score(data_test,target_test)
 
 ```
+
+
+
+
+    0.8126765753592925
+
+
 
 ## Random forests
 
@@ -208,20 +571,56 @@ In the cell below, instantiate and fit a `RandomForestClassifier`, and set the n
 
 ```python
 # Instantiate and fit a RandomForestClassifier
-forest = None
+forest = RandomForestClassifier(criterion='gini', max_depth=5)
+forest.fit(data_train,target_train)
 ```
+
+    C:\Users\FlatIron_User\.conda\envs\learn-env\lib\site-packages\sklearn\ensemble\forest.py:245: FutureWarning: The default value of n_estimators will change from 10 in version 0.20 to 100 in 0.22.
+      "10 in version 0.20 to 100 in 0.22.", FutureWarning)
+    C:\Users\FlatIron_User\.conda\envs\learn-env\lib\site-packages\ipykernel_launcher.py:3: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
+      This is separate from the ipykernel package so we can avoid doing imports until
+    
+
+
+
+
+    RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+                           max_depth=5, max_features='auto', max_leaf_nodes=None,
+                           min_impurity_decrease=0.0, min_impurity_split=None,
+                           min_samples_leaf=1, min_samples_split=2,
+                           min_weight_fraction_leaf=0.0, n_estimators=10,
+                           n_jobs=None, oob_score=False, random_state=None,
+                           verbose=0, warm_start=False)
+
+
 
 Now, let's check the training and testing accuracy of the model using its `.score()` method: 
 
 
 ```python
 # Training accuracy score
+forest.score(data_train,target_train)
 ```
+
+
+
+
+    0.7957002457002457
+
+
 
 
 ```python
 # Test accuracy score
+forest.score(data_test,target_test)
 ```
+
+
+
+
+    0.7927773000859846
+
+
 
 ### Feature importance
 
@@ -229,6 +628,10 @@ Now, let's check the training and testing accuracy of the model using its `.scor
 ```python
 plot_feature_importances(forest)
 ```
+
+
+![png](index_files/index_44_0.png)
+
 
 Note: "relationship" represents what this individual is relative to others. For example an
 individual could be a Husband. Each entry only has one relationship, so it is a bit of a weird attribute.
@@ -244,9 +647,27 @@ In the cell below, create another `RandomForestClassifier`.  Set the number of e
 
 ```python
 # Instantiate and fit a RandomForestClassifier
-forest_2 = None
+forest_2 = RandomForestClassifier(n_estimators=5, criterion='gini', max_depth=2, max_features=10)
+forest_2.fit(data_train,target_train)
 
 ```
+
+    C:\Users\FlatIron_User\.conda\envs\learn-env\lib\site-packages\ipykernel_launcher.py:3: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
+      This is separate from the ipykernel package so we can avoid doing imports until
+    
+
+
+
+
+    RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+                           max_depth=2, max_features=10, max_leaf_nodes=None,
+                           min_impurity_decrease=0.0, min_impurity_split=None,
+                           min_samples_leaf=1, min_samples_split=2,
+                           min_weight_fraction_leaf=0.0, n_estimators=5,
+                           n_jobs=None, oob_score=False, random_state=None,
+                           verbose=0, warm_start=False)
+
+
 
 Making `max_features` smaller will lead to very different trees in your forest! The trees in your forest are stored in the `.estimators_` attribute.
 
@@ -255,8 +676,21 @@ In the cell below, get the first tree from `forest_2.estimators_` and store it i
 
 ```python
 # First tree from forest_2
-rf_tree_1 = None
+rf_tree_1 = forest_2.estimators_[0]
+rf_tree_1
 ```
+
+
+
+
+    DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=2,
+                           max_features=10, max_leaf_nodes=None,
+                           min_impurity_decrease=0.0, min_impurity_split=None,
+                           min_samples_leaf=1, min_samples_split=2,
+                           min_weight_fraction_leaf=0.0, presort=False,
+                           random_state=1194674174, splitter='best')
+
+
 
 Now, we can reuse our `plot_feature_importances()` function to visualize which features this tree was given to use duing subspace sampling. 
 
@@ -265,21 +699,39 @@ In the cell below, call `plot_feature_importances()` on `rf_tree_1`.
 
 ```python
 # Feature importance
-
+plot_feature_importances(rf_tree_1)
 ```
+
+
+![png](index_files/index_52_0.png)
+
 
 Now, grab the second tree and store it in `rf_tree_2`, and then pass it to `plot_feature_importances()` in the following cell so we can compare which features were most useful to each. 
 
 
 ```python
 # Second tree from forest_2
-rf_tree_2 = None
+rf_tree_2 = forest_2.estimators_[1]
 ```
 
 
 ```python
 # Feature importance
+plot_feature_importances(rf_tree_2)
 ```
+
+
+![png](index_files/index_55_0.png)
+
+
+
+```python
+plot_feature_importances(forest_2)
+```
+
+
+![png](index_files/index_56_0.png)
+
 
 We can see by comparing the two plots that the two trees we examined from our random forest look at different attributes, and have wildly different feature importances!
 
